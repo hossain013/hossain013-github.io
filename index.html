@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+		#details{
+			width: 100%;
+			margin: 30px auto;
+		}
+		.table{
+			line-height: 1.5;
+		}
+		td{
+			padding: 5px;
+		}
+		.thead{
+			font-weight: bold;
+		}
+		#button{
+			background: black;
+			padding: 10px 15px;
+			color:white;
+			border:none;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+
+<center>
+	<button type="button" id="button">College Degree ></button>
+
+	<div id="collegeDegrees"></div>
+</center>
+
+<script>
+	//create a self invoking that sets an event handler on our button that calls makeRequest when clicked
+	(function () {
+		var httpRequest;
+		document.getElementById("button").onclick = function () {
+			makeRequest('collegeDegrees.json');
+		};
+		//makeRequest () create new XMLHttpRequset object
+		function makeRequest(url){
+			httpRequest = new XMLHttpRequest();
+			//if the request object is not successfully created, exit and provide an alert
+			if (!httpRequest){
+				alert('Exiting : cannot create an XMLHTTP instance');
+				return false;
+			}
+			//handle the server respond, call generateTableContents when the state of request changes
+			httpRequest.onreadystatechange = generateTableContents;
+			//make the request with open() and send()
+			httpRequest.open('GET', url);
+			httpRequest.send();
+		}
+		//check for the state of the request if it is DONE, then we know we receive a full response from the server
+		function generateTableContents(){
+			if (httpRequest.readyState === XMLHttpRequest.DONE){
+				//check the response code, 200 indicates a successful AJAX call
+				if (httpRequest.status === 200){
+					//if successful, set var to the responseText property of the XMLHttpRequest object
+					var jsonOfDegrees = JSON.parse(httpRequest.responseText);
+
+					// html variable for generating html from the json returned in the response
+					var tableHtml = '';
+					tableHtml += "<table class='table' border='1'>";
+					tableHtml += "<tr>";
+					tableHtml += "<td class='thead'>Name</td>";
+					tableHtml += "<td class='thead'>Degree</td>";
+					tableHtml += "<td class='thead'>Comapany</td>";
+					tableHtml += "<td class='thead'>Job Title</td>";
+					tableHtml += "<td class='thead'>Department</td>";
+					tableHtml += "<td class='thead'>Year conferred</td>";
+					tableHtml += "</tr>";
+
+					if(jsonOfDegrees.degrees.length > 0){
+						for(var i=0; i < jsonOfDegrees.degrees.length; i++){
+							var degree = jsonOfDegrees.degrees[i].degree;
+							tableHtml += '<tr>';
+							tableHtml += '<td>'+degree.Name+'</td>';
+							tableHtml += '<td>'+degree.Degree+'</td>';
+							tableHtml += '<td>'+degree.Company+'</td>';
+							tableHtml += '<td>'+degree.Job+'</td>';
+							tableHtml += '<td>'+degree.Department+'</td>';
+							tableHtml += '<td>'+degree.year+'</td>';
+							tableHtml += '</tr>';
+						}
+					}
+					//append the generated html inside the table
+					document.getElementById("collegeDegrees").innerHTML = tableHtml;
+
+				} else {
+					// if our AJAX call is unsuccessful, provide an alert indicating that there problem
+					alert('There was a problem with the request, Plz check with hosting provider');
+				}
+			}
+		}
+	})();
+</script>
+
+</body>
+</html>
+
