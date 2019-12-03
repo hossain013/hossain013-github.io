@@ -27,9 +27,9 @@
 <body>
 
 <center>
-	<button type="button" id="button">College Degree ></button>
+	<button type="button" id="button">College Degree</button>
 
-	<div id="collegeDegrees"></div>
+	<div id="details"></div>
 </center>
 
 <script>
@@ -37,7 +37,7 @@
 	(function () {
 		var httpRequest;
 		document.getElementById("button").onclick = function () {
-			makeRequest('collegeDegrees.json');
+			makeRequest('degrees.json');
 		};
 		//makeRequest () create new XMLHttpRequset object
 		function makeRequest(url){
@@ -65,11 +65,9 @@
 					var tableHtml = '';
 					tableHtml += "<table class='table' border='1'>";
 					tableHtml += "<tr>";
-					tableHtml += "<td class='thead'>Name</td>";
-					tableHtml += "<td class='thead'>Degree</td>";
-					tableHtml += "<td class='thead'>Comapany</td>";
-					tableHtml += "<td class='thead'>Job Title</td>";
-					tableHtml += "<td class='thead'>Department</td>";
+					tableHtml += "<td class='thead'>School</td>";
+					tableHtml += "<td class='thead'>Program</td>";
+					tableHtml += "<td class='thead'>Type</td>";
 					tableHtml += "<td class='thead'>Year conferred</td>";
 					tableHtml += "</tr>";
 
@@ -77,17 +75,15 @@
 						for(var i=0; i < jsonOfDegrees.degrees.length; i++){
 							var degree = jsonOfDegrees.degrees[i].degree;
 							tableHtml += '<tr>';
-							tableHtml += '<td>'+degree.Name+'</td>';
-							tableHtml += '<td>'+degree.Degree+'</td>';
-							tableHtml += '<td>'+degree.Company+'</td>';
-							tableHtml += '<td>'+degree.Job+'</td>';
-							tableHtml += '<td>'+degree.Department+'</td>';
+							tableHtml += '<td>'+degree.School+'</td>';
+							tableHtml += '<td>'+degree.Program+'</td>';
+							tableHtml += '<td>'+degree.Type+'</td>';
 							tableHtml += '<td>'+degree.year+'</td>';
 							tableHtml += '</tr>';
 						}
 					}
 					//append the generated html inside the table
-					document.getElementById("collegeDegrees").innerHTML = tableHtml;
+					document.getElementById("details").innerHTML = tableHtml;
 
 				} else {
 					// if our AJAX call is unsuccessful, provide an alert indicating that there problem
